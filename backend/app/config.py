@@ -34,5 +34,8 @@ CV_FOLDS = 5
 FRONTEND_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+
     "https://automl-studio-eight.vercel.app",
+
+    "https://automl-studio-git-main-tanay-72s-projects.vercel.app",
 ]
