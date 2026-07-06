@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# Backend generated files
+backend/sessions/
+
+# Frontend dependencies
+frontend/node_modules/
+
+# Environment variables
+.env
+
