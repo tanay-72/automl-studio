@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Card from "./shared/Card.jsx";
 import Spinner from "./shared/Spinner.jsx";
+import Button from "./shared/Button.jsx";
+import { Chip } from "./shared/Chip.jsx";
 import { ErrorBanner } from "./shared/Badge.jsx";
 import { api } from "../api/client.js";
 import { useAppState } from "../context/AppContext.jsx";
@@ -50,7 +52,7 @@ export default function PredictStep() {
   return (
     <div className="max-w-3xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 6 of 6</p>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-2">Make a prediction</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink mb-2">Make a prediction</h1>
       <p className="text-ink2 mb-6">
         Enter feature values and pick a trained model to predict{" "}
         <span className="font-mono bg-paper2 px-1.5 py-0.5 rounded">{targetInfo.target_column}</span>.
@@ -69,17 +71,9 @@ export default function PredictStep() {
               {schema.available_models.map((key) => {
                 const display = trainResult.results.find((r) => r.model_key === key)?.display_name || key;
                 return (
-                  <button
-                    key={key}
-                    onClick={() => setModelKey(key)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-mono border ${
-                      modelKey === key
-                        ? "border-indigo-600 bg-indigo-600 text-white"
-                        : "border-line text-ink2 hover:border-indigo-300"
-                    }`}
-                  >
+                  <Chip key={key} active={modelKey === key} onClick={() => setModelKey(key)}>
                     {display}
-                  </button>
+                  </Chip>
                 );
               })}
             </div>
@@ -96,13 +90,13 @@ export default function PredictStep() {
                       value={inputs[f.name] ?? ""}
                       step="any"
                       onChange={(e) => setInputs((p) => ({ ...p, [f.name]: e.target.value }))}
-                      className="w-full px-3 py-2 border border-line rounded-lg bg-paper font-mono text-sm"
+                      className="w-full px-3 py-2 border border-line rounded-lg bg-white font-mono text-sm transition-colors focus:border-indigo-400 focus:bg-white"
                     />
                   ) : (
                     <select
                       value={inputs[f.name] ?? ""}
                       onChange={(e) => setInputs((p) => ({ ...p, [f.name]: e.target.value }))}
-                      className="w-full px-3 py-2 border border-line rounded-lg bg-paper font-mono text-sm"
+                      className="w-full px-3 py-2 border border-line rounded-lg bg-white font-mono text-sm transition-colors focus:border-indigo-400"
                     >
                       {f.options.map((opt) => (
                         <option key={opt} value={opt}>
@@ -124,18 +118,14 @@ export default function PredictStep() {
           {predicting ? (
             <Spinner label="Running model..." />
           ) : (
-            <button
-              onClick={handlePredict}
-              className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-700"
-            >
-              Predict →
-            </button>
+            <Button onClick={handlePredict}>Predict →</Button>
           )}
 
           {result && (
-            <Card title="Prediction" className="mt-6">
-              <p className="font-display text-2xl text-ink mb-3">
-                {targetInfo.target_column} = <span className="text-indigo-700">{formatPrediction(result.prediction)}</span>
+            <Card title="Prediction" className="mt-6 animate-fade-in-up" hover>
+              <p className="font-display text-3xl text-ink mb-3">
+                {targetInfo.target_column} ={" "}
+                <span className="text-gradient font-bold">{formatPrediction(result.prediction)}</span>
               </p>
               {result.probability && (
                 <div className="space-y-1.5">
@@ -144,8 +134,11 @@ export default function PredictStep() {
                     .map(([cls, p]) => (
                       <div key={cls} className="flex items-center gap-2">
                         <span className="text-xs font-mono text-ink2 w-24 truncate">{cls}</span>
-                        <div className="flex-1 h-3 bg-paper2 rounded-sm overflow-hidden">
-                          <div className="h-full bg-teal rounded-sm" style={{ width: `${p * 100}%` }} />
+                        <div className="flex-1 h-2.5 bg-paper2 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-teal-gradient rounded-full transition-all duration-500"
+                            style={{ width: `${p * 100}%` }}
+                          />
                         </div>
                         <span className="text-xs font-mono text-ink2 w-12 text-right">{(p * 100).toFixed(1)}%</span>
                       </div>
@@ -156,9 +149,9 @@ export default function PredictStep() {
           )}
 
           <div className="mt-8 pt-6 border-t border-line">
-            <button onClick={reset} className="text-sm text-ink2 hover:text-ink underline">
+            <Button variant="ghost" size="sm" onClick={reset} className="!px-0 underline underline-offset-2">
               Start over with a new dataset
-            </button>
+            </Button>
           </div>
         </>
       )}

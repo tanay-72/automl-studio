@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Card from "./shared/Card.jsx";
+import Button from "./shared/Button.jsx";
+import { Chip } from "./shared/Chip.jsx";
 import { Badge } from "./shared/Badge.jsx";
 import PlotlyChart from "./shared/PlotlyChart.jsx";
 import { api } from "../api/client.js";
@@ -18,7 +20,7 @@ export default function CompareStep() {
     <div className="max-w-5xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 5 of 6</p>
       <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-        <h1 className="font-display text-3xl font-semibold text-ink">Compare results</h1>
+        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink">Compare results</h1>
         <Badge tone="teal">best: {labelFor(trainResult, trainResult.best_model_key)}</Badge>
       </div>
       <p className="text-ink2 mb-6">
@@ -44,11 +46,20 @@ export default function CompareStep() {
             {trainResult.results.map((r) => (
               <tr
                 key={r.model_key}
-                className={`border-b border-line/60 ${
-                  r.model_key === trainResult.best_model_key ? "bg-teal-50/50" : ""
+                className={`border-b border-line/60 transition-colors ${
+                  r.model_key === trainResult.best_model_key
+                    ? "bg-teal-50/60 hover:bg-teal-50"
+                    : "hover:bg-paper2/40"
                 }`}
               >
-                <td className="py-2 pr-4 font-medium text-ink">{r.display_name}</td>
+                <td className="py-2 pr-4 font-medium text-ink">
+                  {r.display_name}
+                  {r.model_key === trainResult.best_model_key && (
+                    <span className="ml-2 text-[10px] font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded-full ring-1 ring-inset ring-teal-200/70">
+                      best
+                    </span>
+                  )}
+                </td>
                 {metricKeys.map((m) => (
                   <td key={m} className="py-2 pr-4 font-mono text-ink2">
                     {r.metrics[m] !== undefined ? r.metrics[m].toFixed(4) : "—"}
@@ -58,9 +69,9 @@ export default function CompareStep() {
                 <td className="py-2 pr-4">
                   <a
                     href={api.downloadModelUrl(dataset.session_id, r.model_key)}
-                    className="text-indigo-600 hover:text-indigo-800 font-mono text-xs underline"
+                    className="inline-flex items-center gap-1 text-indigo-600 hover:text-white hover:bg-brand-gradient font-mono text-xs px-2 py-1 rounded-full border border-indigo-200 hover:border-transparent transition-all duration-200"
                   >
-                    .joblib
+                    ↓ .joblib
                   </a>
                 </td>
               </tr>
@@ -69,14 +80,14 @@ export default function CompareStep() {
         </table>
       </Card>
 
-      <Card title="Metric comparison" className="mb-6">
+      <Card title="Metric comparison" className="mb-6" hover>
         <div style={{ height: 420 }}>
           <PlotlyChart figure={trainResult.comparison_chart} />
         </div>
       </Card>
 
       {trainResult.roc_or_residual_chart && (
-        <Card title={isClassification ? "ROC curves" : "Predicted vs actual"} className="mb-6">
+        <Card title={isClassification ? "ROC curves" : "Predicted vs actual"} className="mb-6" hover>
           <div style={{ height: 420 }}>
             <PlotlyChart figure={trainResult.roc_or_residual_chart} />
           </div>
@@ -103,17 +114,9 @@ export default function CompareStep() {
         <Card title="Confusion matrices" className="mb-6">
           <div className="flex gap-2 mb-3 flex-wrap">
             {Object.keys(trainResult.confusion_matrices).map((key) => (
-              <button
-                key={key}
-                onClick={() => setExpanded(key)}
-                className={`px-3 py-1.5 rounded-md text-xs font-mono border ${
-                  expanded === key
-                    ? "border-indigo-600 bg-indigo-600 text-white"
-                    : "border-line text-ink2 hover:border-indigo-300"
-                }`}
-              >
+              <Chip key={key} active={expanded === key} onClick={() => setExpanded(key)}>
                 {labelFor(trainResult, key)}
-              </button>
+              </Chip>
             ))}
           </div>
           {expanded && trainResult.confusion_matrices[expanded] && (
@@ -125,12 +128,7 @@ export default function CompareStep() {
         </Card>
       )}
 
-      <button
-        onClick={() => setStep(5)}
-        className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-700"
-      >
-        Make predictions →
-      </button>
+      <Button onClick={() => setStep(5)}>Make predictions →</Button>
     </div>
   );
 }
@@ -149,9 +147,9 @@ function FeatureImportanceBars({ importance }) {
           <span className="text-xs font-mono text-ink2 w-40 truncate" title={name}>
             {name}
           </span>
-          <div className="flex-1 h-3 bg-paper2 rounded-sm overflow-hidden">
+          <div className="flex-1 h-2.5 bg-paper2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-indigo-600 rounded-sm"
+              className="h-full bg-brand-gradient rounded-full transition-all duration-500"
               style={{ width: `${(value / max) * 100}%` }}
             />
           </div>

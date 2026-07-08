@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Card from "./shared/Card.jsx";
 import Spinner from "./shared/Spinner.jsx";
-import { Badge, ErrorBanner } from "./shared/Badge.jsx";
+import Button from "./shared/Button.jsx";
+import { Chip, Tile } from "./shared/Chip.jsx";
+import { ErrorBanner } from "./shared/Badge.jsx";
 import { api } from "../api/client.js";
 import { useAppState } from "../context/AppContext.jsx";
 
@@ -35,7 +37,7 @@ export default function TargetStep() {
   return (
     <div className="max-w-3xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 2 of 6</p>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-2">Choose what to predict</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink mb-2">Choose what to predict</h1>
       <p className="text-ink2 mb-6">
         <span className="font-mono text-sm bg-paper2 px-1.5 py-0.5 rounded">{dataset.filename || "your file"}</span>{" "}
         has <strong>{dataset.n_rows}</strong> rows and <strong>{dataset.n_cols}</strong> columns. Pick the
@@ -58,7 +60,7 @@ export default function TargetStep() {
           </thead>
           <tbody>
             {dataset.preview.map((row, i) => (
-              <tr key={i} className="border-b border-line/60">
+              <tr key={i} className="border-b border-line/60 hover:bg-paper2/40 transition-colors">
                 {dataset.columns.map((c) => (
                   <td key={c} className="px-3 py-2 whitespace-nowrap text-ink2 font-mono text-xs">
                     {row[c] === null || row[c] === undefined ? (
@@ -77,40 +79,29 @@ export default function TargetStep() {
       <Card title="Target column">
         <div className="grid sm:grid-cols-2 gap-2 mb-6">
           {dataset.columns.map((c) => (
-            <button
+            <Tile
               key={c}
+              active={selected === c}
               onClick={() => setSelected(c)}
-              className={`text-left px-3 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
-                selected === c
-                  ? "border-indigo-600 bg-indigo-50 text-indigo-700"
-                  : "border-line hover:border-indigo-300 text-ink"
-              }`}
+              className="px-3 py-2.5 text-sm font-medium text-ink"
             >
               {c}
               <span className="block text-xs font-mono text-ink2/70">{dataset.dtypes[c]}</span>
-            </button>
+            </Tile>
           ))}
         </div>
 
         <div className="mb-6">
           <p className="text-sm font-medium text-ink mb-2">Problem type</p>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {[
               ["auto", "Auto-detect"],
               ["classification", "Classification"],
               ["regression", "Regression"],
             ].map(([val, label]) => (
-              <button
-                key={val}
-                onClick={() => setOverride(val)}
-                className={`px-3 py-1.5 rounded-md text-xs font-mono border ${
-                  override === val
-                    ? "border-indigo-600 bg-indigo-600 text-white"
-                    : "border-line text-ink2 hover:border-indigo-300"
-                }`}
-              >
+              <Chip key={val} active={override === val} onClick={() => setOverride(val)}>
                 {label}
-              </button>
+              </Chip>
             ))}
           </div>
           <p className="text-xs text-ink2 mt-2">
@@ -122,13 +113,9 @@ export default function TargetStep() {
         {loading ? (
           <Spinner label="Cleaning data and detecting task type..." />
         ) : (
-          <button
-            onClick={handleContinue}
-            disabled={!selected}
-            className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            Clean data & continue →
-          </button>
+          <Button onClick={handleContinue} disabled={!selected}>
+            Clean data &amp; continue →
+          </Button>
         )}
       </Card>
     </div>

@@ -34,7 +34,9 @@ export default function UploadStep() {
   return (
     <div className="max-w-2xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 1 of 6</p>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-2">Upload your dataset</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink mb-2">
+        Upload your <span className="text-gradient">dataset</span>
+      </h1>
       <p className="text-ink2 mb-6">
         Drop in a CSV file. We'll detect column types, then walk you through cleaning, exploring, and
         modeling it — no setup required.
@@ -58,11 +60,17 @@ export default function UploadStep() {
               handleFile(e.dataTransfer.files?.[0]);
             }}
             onClick={() => inputRef.current?.click()}
-            className={`flex flex-col items-center justify-center text-center rounded-lg border-2 border-dashed px-6 py-14 cursor-pointer transition-colors ${
-              dragOver ? "border-indigo-600 bg-indigo-50" : "border-line hover:border-indigo-300"
+            className={`flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed px-6 py-16 cursor-pointer transition-all duration-200 ${
+              dragOver
+                ? "border-indigo-500 bg-brand-gradient-soft scale-[0.99]"
+                : "border-line hover:border-indigo-300 hover:bg-paper2/40"
             }`}
           >
-            <div className="h-12 w-12 rounded-full bg-indigo-50 flex items-center justify-center mb-4 text-indigo-600 font-mono text-sm">
+            <div
+              className={`h-14 w-14 rounded-2xl flex items-center justify-center mb-4 font-mono text-sm shrink-0 transition-all duration-300 ${
+                dragOver ? "bg-brand-gradient text-white shadow-glow -translate-y-1" : "bg-indigo-50 text-indigo-600"
+              }`}
+            >
               .csv
             </div>
             <p className="font-medium text-ink">Drag a CSV file here, or click to browse</p>

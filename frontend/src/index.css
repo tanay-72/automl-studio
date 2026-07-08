@@ -8,12 +8,20 @@ html {
 
 body {
   -webkit-font-smoothing: antialiased;
+  background-color: #faf7f0;
+  background-image:
+    radial-gradient(60% 50% at 12% 0%, rgba(124, 58, 237, 0.09) 0%, rgba(124, 58, 237, 0) 60%),
+    radial-gradient(50% 40% at 100% 8%, rgba(79, 70, 229, 0.10) 0%, rgba(79, 70, 229, 0) 60%),
+    radial-gradient(45% 45% at 90% 95%, rgba(15, 155, 142, 0.07) 0%, rgba(15, 155, 142, 0) 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* Visible keyboard focus ring everywhere, per accessibility floor */
 :focus-visible {
   outline: 2px solid #4f46e5;
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -32,6 +40,23 @@ body {
   background: #e3dcc8;
   border-radius: 6px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background: #d5cbaf;
+}
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* Skeleton/shimmer loading strip, used sparingly on top of paper2 */
+.skeleton {
+  background: linear-gradient(90deg, #f2ede0 0%, #ffffff 50%, #f2ede0 100%);
+  background-size: 800px 100%;
+}
+
+/* Subtle gradient text used for hero-style headings */
+.text-gradient {
+  background-image: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

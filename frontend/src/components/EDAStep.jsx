@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "./shared/Card.jsx";
 import Spinner from "./shared/Spinner.jsx";
+import Button from "./shared/Button.jsx";
 import { Badge, ErrorBanner } from "./shared/Badge.jsx";
 import PlotlyChart from "./shared/PlotlyChart.jsx";
 import { api } from "../api/client.js";
@@ -31,7 +32,7 @@ export default function EDAStep() {
     <div className="max-w-5xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 3 of 6</p>
       <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-        <h1 className="font-display text-3xl font-semibold text-ink">Explore your data</h1>
+        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink">Explore your data</h1>
         <div className="flex gap-2">
           <Badge tone={targetInfo.task_type === "classification" ? "teal" : "indigo"}>
             {targetInfo.task_type}
@@ -57,13 +58,13 @@ export default function EDAStep() {
         </Card>
       ) : eda ? (
         <>
-          <div className="flex gap-1 mb-4 border-b border-line overflow-x-auto">
+          <div className="flex gap-1 mb-6 p-1 rounded-xl bg-paper2/70 border border-line/70 overflow-x-auto w-fit max-w-full">
             {TABS.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-3 py-2 text-sm font-medium whitespace-nowrap border-b-2 -mb-px ${
-                  tab === t ? "border-indigo-600 text-indigo-700" : "border-transparent text-ink2 hover:text-ink"
+                className={`px-3.5 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                  tab === t ? "bg-white text-indigo-700 shadow-sm" : "text-ink2 hover:text-ink"
                 }`}
               >
                 {t}
@@ -79,12 +80,7 @@ export default function EDAStep() {
           {tab === "vs. Target" && <ChartGrid charts={eda.feature_target_relationships} extra={eda.class_balance} />}
 
           <div className="mt-8">
-            <button
-              onClick={() => setStep(3)}
-              className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-700"
-            >
-              Continue to training →
-            </button>
+            <Button onClick={() => setStep(3)}>Continue to training →</Button>
           </div>
         </>
       ) : null}
@@ -188,7 +184,7 @@ function ChartGrid({ charts, extra }) {
         </Card>
       )}
       {entries.map(([col, fig]) => (
-        <Card key={col}>
+        <Card key={col} hover>
           <div style={{ height: 320 }}>
             <PlotlyChart figure={fig} />
           </div>

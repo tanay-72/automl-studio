@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Card from "./shared/Card.jsx";
 import Spinner from "./shared/Spinner.jsx";
+import Button from "./shared/Button.jsx";
+import { Chip } from "./shared/Chip.jsx";
 import { ErrorBanner } from "./shared/Badge.jsx";
 import { api } from "../api/client.js";
 import { useAppState } from "../context/AppContext.jsx";
@@ -73,7 +75,7 @@ export default function TrainStep() {
   return (
     <div className="max-w-4xl">
       <p className="text-xs font-mono uppercase tracking-wider text-indigo-600 mb-2">Step 4 of 6</p>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-2">Train models</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-semibold text-ink mb-2">Train models</h1>
       <p className="text-ink2 mb-6">
         Choose which algorithms to train for this {targetInfo.task_type} task. Each one is trained on an
         80/20 split of your cleaned data with the same preprocessing pipeline, so results are comparable.
@@ -83,22 +85,12 @@ export default function TrainStep() {
 
       <Card title="Tuning mode" className="mb-6">
         <div className="flex gap-2">
-          <button
-            onClick={() => setTune(false)}
-            className={`px-3 py-1.5 rounded-md text-xs font-mono border ${
-              !tune ? "border-indigo-600 bg-indigo-600 text-white" : "border-line text-ink2 hover:border-indigo-300"
-            }`}
-          >
+          <Chip active={!tune} onClick={() => setTune(false)}>
             Use my hyperparameters
-          </button>
-          <button
-            onClick={() => setTune(true)}
-            className={`px-3 py-1.5 rounded-md text-xs font-mono border ${
-              tune ? "border-indigo-600 bg-indigo-600 text-white" : "border-line text-ink2 hover:border-indigo-300"
-            }`}
-          >
+          </Chip>
+          <Chip active={tune} onClick={() => setTune(true)}>
             Auto-tune (grid search)
-          </button>
+          </Chip>
         </div>
         <p className="text-xs text-ink2 mt-2">
           Auto-tune runs cross-validated grid search over a predefined range per algorithm and may take
@@ -111,7 +103,13 @@ export default function TrainStep() {
       ) : (
         <div className="space-y-3">
           {algorithms.map((algo) => (
-            <Card key={algo.key} className={selected.has(algo.key) ? "" : "opacity-60"}>
+            <Card
+              key={algo.key}
+              hover
+              className={`transition-opacity duration-200 ${
+                selected.has(algo.key) ? "ring-1 ring-indigo-100" : "opacity-55"
+              }`}
+            >
               <div className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -131,7 +129,7 @@ export default function TrainStep() {
                             value={params[algo.key]?.[p] ?? ""}
                             disabled={!selected.has(algo.key)}
                             onChange={(e) => updateParam(algo.key, p, e.target.value)}
-                            className="ml-2 w-20 px-1.5 py-0.5 border border-line rounded text-ink bg-paper disabled:bg-paper2"
+                            className="ml-2 w-20 px-1.5 py-0.5 border border-line rounded-md text-ink bg-paper disabled:bg-paper2 focus:border-indigo-400 transition-colors"
                           />
                         </label>
                       ))}
@@ -148,13 +146,9 @@ export default function TrainStep() {
         {training ? (
           <Spinner label={tune ? "Running grid search across algorithms..." : "Training selected models..."} />
         ) : (
-          <button
-            onClick={handleTrain}
-            disabled={loadingList}
-            className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-700 disabled:opacity-40"
-          >
+          <Button onClick={handleTrain} disabled={loadingList}>
             Train {selected.size} model{selected.size === 1 ? "" : "s"} →
-          </button>
+          </Button>
         )}
       </div>
     </div>

@@ -27,10 +27,10 @@ function Shell() {
   const StepComponent = STEP_COMPONENTS[step];
 
   return (
-    <div className="min-h-screen bg-paper">
-      <div className="max-w-6xl mx-auto px-6 py-8 flex gap-12">
+    <div className="min-h-screen">
+      <div className="max-w-6xl mx-auto px-6 py-8 lg:flex gap-12">
         <PipelineRail currentStep={step} maxReachableStep={maxReachable} onJump={setStep} />
-        <main className="flex-1 min-w-0 pb-24">
+        <main className="flex-1 min-w-0 pb-24 animate-fade-in-up">
           <StepComponent />
         </main>
       </div>
