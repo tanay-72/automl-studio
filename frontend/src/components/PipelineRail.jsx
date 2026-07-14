@@ -21,7 +21,7 @@ export default function PipelineRail({ currentStep, maxReachableStep, onJump }) 
         <div className="sticky top-8">
           <div className="mb-9 flex items-center gap-3">
             <span className="h-9 w-9 rounded-xl bg-brand-gradient shadow-glow flex items-center justify-center text-white font-display font-bold text-sm shrink-0">
-              AI
+              ML
             </span>
             <div>
               <p className="font-display text-xl font-semibold text-ink leading-tight">AutoML Studio</p>
@@ -83,7 +83,7 @@ export default function PipelineRail({ currentStep, maxReachableStep, onJump }) 
       <div className="lg:hidden sticky top-0 z-20 -mx-6 px-6 py-3 mb-6 bg-paper/85 backdrop-blur-md border-b border-line">
         <div className="flex items-center gap-2 mb-2">
           <span className="h-6 w-6 rounded-lg bg-brand-gradient shadow-glow flex items-center justify-center text-white font-display font-bold text-[10px] shrink-0">
-            AI
+            ML
           </span>
           <p className="font-display text-sm font-semibold text-ink">AutoML Studio</p>
           <span className="ml-auto text-xs font-mono text-ink2">
