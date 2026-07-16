@@ -137,7 +137,7 @@ served from the same origin under `/api`.
   renders it with `react-plotly.js`, keeping charts interactive (zoom, hover,
   legend toggling) for free.
 
-## Extending it
+## Extending the Studio
 
 - Swap `SessionStore` (`backend/app/storage.py`) for Redis or a database for
   multi-instance deployments.
